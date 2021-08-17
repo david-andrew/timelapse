@@ -2,7 +2,6 @@ import os
 import cv2
 import time
 import numpy as np
-import pdb
 
 
 #TODO -> update these to take both an interval and a frame duration
@@ -94,7 +93,7 @@ def rolling_timelapse(camera, save_path, interval, shutter_duration):
 
 if __name__ == '__main__':
     camera = cv2.VideoCapture(0)
-    save_path = '/home/david/Dropbox/Images/Timelapse/' + str(int(time.time())) + '/'
+    save_path = os.path.join('images', str(int(time.time())))
     os.mkdir(save_path)
 
     if not camera.isOpened():
