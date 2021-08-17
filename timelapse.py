@@ -18,15 +18,24 @@ import numpy as np
 #             i += 1
 #             time.sleep(interval)
 
+class NullIO(StringIO):
+    def write(self, txt):
+       pass
+
+def silence_output():
+    sys.stdout = NullIO()
+    sys.stderr = NullIO()
+
+def reset_output():
+    sys.stdout = sys.__stdout__
+    sys.stderr = sys.__stderr__
+
+
 def get_frame(camera):
-    #silence output from camera.read()
-    old_stdout = sys.stdout # backup current stdout
-    sys.stdout = open(os.devnull, "w")    
-
-    #read the frame. sometime spits out corrupt jpeg data when not corrupt
-    ret, frame = camera.read()
-
-    sys.stdout = old_stdout # reset old stdout
+    #wrap read in output silencer
+    silence_output()            #silence output from camera.read()
+    ret, frame = camera.read()  #read the frame. sometime spits out corrupt jpeg data when not corrupt
+    reset_output()              #reset stdout/stderr
 
     return frame
 
