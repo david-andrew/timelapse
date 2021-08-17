@@ -1,4 +1,5 @@
 import os
+import sys
 import cv2
 import time
 import numpy as np
@@ -17,14 +18,26 @@ import numpy as np
 #             i += 1
 #             time.sleep(interval)
 
+def get_frame(camera):
+    #silence output from camera.read()
+    old_stdout = sys.stdout # backup current stdout
+    sys.stdout = open(os.devnull, "w")    
+
+    #read the frame. sometime spits out corrupt jpeg data when not corrupt
+    ret, frame = camera.read()
+
+    sys.stdout = old_stdout # reset old stdout
+
+    return frame
+
 def simple_difference(camera, save_path, interval):
     i = 0
     start = time.time()
-    _, last_frame = camera.read()
-    _, best_frame = camera.read()
+    last_frame = get_frame(camera)
+    best_frame = get_frame(camera)
     best_score = 0
     while True:
-        ret, frame = camera.read()
+        frame = get_frame(camera)
         if frame is not None:
             score = np.abs(last_frame.astype(np.int64) - frame.astype(np.int64)).sum()
             print(score)
@@ -46,10 +59,10 @@ def simple_difference(camera, save_path, interval):
 def mean_timelapse(camera, save_path, interval):
     i = 0
     start = time.time()
-    mean_frame = camera.read()[1].astype(np.uint64)
+    mean_frame = get_frame(camera).astype(np.uint64)
     frame_count = 1
     while True:
-        frame = camera.read()[1]
+        frame = get_frame(camera)
         if frame is not None:
             mean_frame += frame
             frame_count += 1
@@ -70,10 +83,10 @@ def rolling_timelapse(camera, save_path, interval, shutter_duration):
     fps = 30
     fpi = fps * interval
     start = time.time()
-    rolling_frame = camera.read()[1].astype(np.double)
+    rolling_frame = get_frame(camera).astype(np.double)
     frame_count = 0
     while True:
-        frame = camera.read()[1]
+        frame = get_frame(camera)
         if frame is not None:
             rolling_frame += (frame - rolling_frame) / (fpi / (shutter_duration / fps))
             frame_count += 1
