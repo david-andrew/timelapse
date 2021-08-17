@@ -34,8 +34,8 @@ def simple_difference(camera, save_path, interval):
 
         if time.time() - start > interval:
             #save the current frame
-            cv2.imwrite(save_path + 'img' + str(i) + '.png', frame)
-            print('saving img' + str(i) + ' (score: ' + str(int(best_score)) + ')')
+            cv2.imwrite(os.path.join(save_path, f'img{i}.png'), frame)
+            print(f'saving img{i} (score: {best_score:.2f})')
             i += 1
             best_score = 0
             last_frame = best_frame
@@ -56,8 +56,8 @@ def mean_timelapse(camera, save_path, interval):
 
             if time.time() - start > interval:
                 mean_frame = (mean_frame / frame_count).astype(np.uint8)
-                cv2.imwrite(save_path + 'img' + str(i) + '.png', mean_frame)
-                print('saving img' + str(i))
+                cv2.imwrite(os.path.join(save_path, f'img{i}.png'), mean_frame)
+                print(f'saving img{i}')
                 i += 1
 
                 mean_frame = frame.astype(np.uint64)
@@ -79,8 +79,8 @@ def rolling_timelapse(camera, save_path, interval, shutter_duration):
             frame_count += 1
 
         if time.time() - start > interval:
-            cv2.imwrite(save_path + 'img' + str(i) + '.png', rolling_frame.astype(np.uint8))
-            print('saving img' + str(i) + ' (fps: %f)' % (fpi / interval))
+            cv2.imwrite(os.path.join(save_path, f'img{i}.png'), rolling_frame.astype(np.uint8))
+            print(f'saving img{i} (fps: {fpi/interval})')
             i += 1
 
             fpi = frame_count
