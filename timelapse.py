@@ -7,15 +7,15 @@ import numpy as np
 #TODO -> update these to take both an interval and a frame duration
 
 
-def regular_timelapse(camera, save_path, interval):
-    i = 0
-    while True:
-        _, frame = camera.read()
-        if frame is not None:
-            cv2.imwrite(save_path + 'img' + str(i) + '.png', mean_frame)
-            print('saving img' + str(i))
-            i += 1
-            time.sleep(interval)
+# def regular_timelapse(camera, save_path, interval):
+#     i = 0
+#     while True:
+#         _, frame = camera.read()
+#         if frame is not None:
+#             cv2.imwrite(save_path + 'img' + str(i) + '.png', mean_frame)
+#             print('saving img' + str(i))
+#             i += 1
+#             time.sleep(interval)
 
 def simple_difference(camera, save_path, interval):
     i = 0
@@ -94,7 +94,7 @@ def rolling_timelapse(camera, save_path, interval, shutter_duration):
 if __name__ == '__main__':
     camera = cv2.VideoCapture(0)
     save_path = os.path.join('images', str(int(time.time())))
-    os.mkdir(save_path)
+    os.makedirs(save_path)
 
     if not camera.isOpened():
         raise Exception('Error: camera failed to open!')
