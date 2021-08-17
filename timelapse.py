@@ -6,38 +6,12 @@ import time
 import numpy as np
 
 
-#TODO -> update these to take both an interval and a frame duration
 
 
-# def regular_timelapse(camera, save_path, interval):
-#     i = 0
-#     while True:
-#         _, frame = camera.read()
-#         if frame is not None:
-#             cv2.imwrite(save_path + 'img' + str(i) + '.png', mean_frame)
-#             print('saving img' + str(i))
-#             i += 1
-#             time.sleep(interval)
-
-class NullIO(StringIO):
-    def write(self, txt):
-       pass
-
-def silence_output():
-    sys.stdout = NullIO()
-    sys.stderr = NullIO()
-
-def reset_output():
-    sys.stdout = sys.__stdout__
-    sys.stderr = sys.__stderr__
-
-
+#if camera.read() produces an error like "Corrupt JPEG data: 1 extraneous bytes before marker 0xd5"
+#run command as $ python timelapse.py 2>/dev/null
 def get_frame(camera):
-    #wrap read in output silencer
-    silence_output()            #silence output from camera.read()
     ret, frame = camera.read()  #read the frame. sometime spits out corrupt jpeg data when not corrupt
-    reset_output()              #reset stdout/stderr
-
     return frame
 
 def simple_difference(camera, save_path, interval):
