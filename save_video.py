@@ -1,17 +1,10 @@
 import sys
 import os
 import glob
-import cv2
 import imageio
-import pdb
 import re
 
-def natural_sort(l): 
-    convert = lambda text: int(text) if text.isdigit() else text.lower() 
-    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
-    return sorted(l, key = alphanum_key)
-
-if __name__ == '__main__':
+def main():
     folder_path = input('Enter path of folder with images to convert:\n')
     image_paths = []
     
@@ -25,11 +18,26 @@ if __name__ == '__main__':
     images = [imageio.imread(image_path) for image_path in image_paths]
     print('Done')
 
-    print('Writing images to video...', end='')
+    status = 'Writing images to video...'
+    sys.stdout.write(f'{status}\r')
     sys.stdout.flush()
     fps = 60.0
     out = imageio.get_writer('timelapse.mp4', fps=fps)
-    for image in images:
+    for i, image in enumerate(images):
         out.append_data(image)
+        percent = i / len(images) * 100
+        sys.stdout.write(f'{status}[{percent:.2f}%]\r')
+        sys.stdout.flush()
     out.close()
-    print('Done')
+    print(f'{status}Done')
+
+
+def natural_sort(l): 
+    convert = lambda text: int(text) if text.isdigit() else text.lower() 
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    return sorted(l, key = alphanum_key)
+
+
+
+if __name__ == '__main__':
+    main()
