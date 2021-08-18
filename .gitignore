@@ -1,2 +1,11 @@
+#vscode files
 .vscode
+
+#default save directory, ignore images in here
 images/*
+
+#mount folder for saving from pi
+mnt
+
+#python cache
+__pycache__
