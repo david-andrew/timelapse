@@ -1,4 +1,7 @@
 {
     "save_prefix": "image",
-    "version": 0
+    "version": 0,
+    "kwargs": {
+        "interval": 30
+    }
 }

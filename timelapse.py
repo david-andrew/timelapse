@@ -94,7 +94,8 @@ if __name__ == '__main__':
         config = json.dump(f)
         save_prefix = config['save_prefix'] # root directory to save at
         version = config['version']         # which timelapse version to run
-    
+        kwargs = config['kwargs']
+
     #open the camera
     camera = cv2.VideoCapture(0)
     if not camera.isOpened():
@@ -105,13 +106,13 @@ if __name__ == '__main__':
     os.makedirs(save_path)
     
     #run specific timelapse algorithm based on version specified in config
-    if version == 0:
-        simple_difference(camera, save_path, interval=5)
-    elif version == 1:
-        mean_timelapse(camera, save_path, interval=30)
-    elif version == 2:
-        rolling_timelapse(camera, save_path, interval=30, shutter_duration=30)
-    elif version == 3:
-        mean_timelapse(camera, save_path, interval=60*60*1) #super fast. working our way to day long exposures
-    elif version == 4:
-        rolling_timelapse(camera, save_path, interval=1, shutter_duration=1)
+    func = [simple_difference, mean_timelapse, rolling_timelapse][version]
+    
+    #run the function with the save path and any more keyword arguments
+    func(camera, save_path, **kwargs)
+
+    # simple_difference(camera, save_path, interval=5)
+    # mean_timelapse(camera, save_path, interval=30)
+    # rolling_timelapse(camera, save_path, interval=30, shutter_duration=30)
+    # mean_timelapse(camera, save_path, interval=60*60*1) #super fast. working our way to day long exposures
+    # rolling_timelapse(camera, save_path, interval=1, shutter_duration=1)
