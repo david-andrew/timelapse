@@ -89,15 +89,29 @@ def rolling_timelapse(camera, save_path, interval, shutter_duration):
 
 
 if __name__ == '__main__':
+    #grab the config settings
+    with open('config.json', 'r') as f:
+        config = json.dump(f)
+        save_prefix = config['save_prefix'] # root directory to save at
+        version = config['version']         # which timelapse version to run
+    
+    #open the camera
     camera = cv2.VideoCapture(0)
-    save_path = os.path.join('images', str(int(time.time())))
-    os.makedirs(save_path)
-
     if not camera.isOpened():
         raise Exception('Error: camera failed to open!')
 
-    # simple_difference(camera, save_path, interval=5)
-    # mean_timelapse(camera, save_path, interval=30)
-    rolling_timelapse(camera, save_path, interval=30, shutter_duration=30)
-    # mean_timelapse(camera, save_path, interval=60*60*1) #super fast. working our way to day long exposures
-    # rolling_timelapse(camera, save_path, interval=1, shutter_duration=1)
+    #create a new folder at the save root to contain this sequence of images
+    save_path = os.path.join(save_prefix, str(int(time.time())))
+    os.makedirs(save_path)
+    
+    #run specific timelapse algorithm based on version specified in config
+    if version == 0:
+        simple_difference(camera, save_path, interval=5)
+    elif version == 1:
+        mean_timelapse(camera, save_path, interval=30)
+    elif version == 2:
+        rolling_timelapse(camera, save_path, interval=30, shutter_duration=30)
+    elif version == 3:
+        mean_timelapse(camera, save_path, interval=60*60*1) #super fast. working our way to day long exposures
+    elif version == 4:
+        rolling_timelapse(camera, save_path, interval=1, shutter_duration=1)
