@@ -91,7 +91,7 @@ def rolling_timelapse(camera, save_path, interval, shutter_duration):
 if __name__ == '__main__':
     #grab the config settings
     with open('config.json', 'r') as f:
-        config = json.dump(f)
+        config = json.load(f)
         save_prefix = config['save_prefix'] # root directory to save at
         version = config['version']         # which timelapse version to run
         kwargs = config['kwargs']
