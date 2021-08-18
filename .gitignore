@@ -9,3 +9,6 @@ mnt
 
 #python cache
 __pycache__
+
+#ignore pi version of run.sh
+pi_run.sh
