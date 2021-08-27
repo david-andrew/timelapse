@@ -13,10 +13,13 @@ def main():
     status = 'Loading images...'
     print_percent(status)
 
+    #save the starting path, and move to the path of the images
+    original_path = os.getcwd()
     os.chdir(folder_path)
+
+    #load all the images (and apply a 90 deg rotation b/c my camera is sideways)
     for file in glob.glob('*.png'):
         image_paths.append(file)
-    
     image_paths = natural_sort(image_paths)
     images = []
     for i, image_path in enumerate(image_paths):
@@ -25,8 +28,12 @@ def main():
         images.append(image)
         print_percent(status, i / len(image_paths) * 100)
     print_percent(status)
-    print('Done    ')
+    print('Done     ')
 
+    #move back to the original directory to save the video
+    os.chdir(original_path)
+
+    #write the images to the output file
     status = 'Writing images to video...'
     print_percent(status)
     fps = 60.0
@@ -36,7 +43,7 @@ def main():
         print_percent(status, i / len(images) * 100)
     out.close()
     print_percent(status)
-    print('Done    ')
+    print('Done     ')
 
 
 def natural_sort(l): 
