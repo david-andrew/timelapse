@@ -7,6 +7,7 @@ import numpy as np
 
 def main():
     folder_path = input('Enter path of folder with images to convert:\n')
+    out_path = 'output/timelapse.mp4'
     image_paths = []
     
     status = 'Loading images...'
@@ -29,7 +30,7 @@ def main():
     status = 'Writing images to video...'
     print_percent(status)
     fps = 60.0
-    out = imageio.get_writer('timelapse.mp4', fps=fps)
+    out = imageio.get_writer(out_path, fps=fps)
     for i, image in enumerate(images):
         out.append_data(image)
         print_percent(status, i / len(images) * 100)

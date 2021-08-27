@@ -4,6 +4,9 @@
 #default save directory, ignore images in here
 images/*
 
+#output folder for videos
+output/*.mp4
+
 #mount folder for saving from pi
 mnt
 
