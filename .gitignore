@@ -5,7 +5,7 @@
 images/*
 
 #output folder for videos
-output/*.mp4
+output/*
 
 #mount folder for saving from pi
 mnt
